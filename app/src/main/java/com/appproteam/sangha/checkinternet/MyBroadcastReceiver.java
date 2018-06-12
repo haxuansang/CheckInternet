@@ -22,9 +22,21 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     {
         ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo!=null && networkInfo.isConnected())
+        if (networkInfo!=null && networkInfo.isConnected() && networkInfo.isAvailable() && isInternetAvailable())
             return true;
         else return false;
 
+    }
+    private boolean isInternetAvailable()
+    {
+        try
+        {
+            return (Runtime.getRuntime().exec ("ping -c 1 google.com").waitFor() == 0);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return false;
     }
 }
